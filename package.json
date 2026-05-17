@@ -1,9 +1,22 @@
 {
   "name": "algorion-capital-site",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
+  "description": "A premium broker-style React landing page inspired by the provided reference websites.",
+  "homepage": "https://github.com/sdeayushigupta55-netizen/TradeCapitalMarket#readme",
+  "bugs": {
+    "url": "https://github.com/sdeayushigupta55-netizen/TradeCapitalMarket/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sdeayushigupta55-netizen/TradeCapitalMarket.git"
+  },
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "main": "vite.config.js",
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"

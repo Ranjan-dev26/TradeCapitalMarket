@@ -202,6 +202,7 @@ function CountUp({ to, suffix = "", prefix = "", duration = 1200 }) {
 export default function TradeCapitalLanding() {
   const [theme, setTheme] = usePersistentTheme();
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isDark = theme === "dark";
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.2], [0, -24]);
@@ -231,11 +232,19 @@ export default function TradeCapitalLanding() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setMobileMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [mobileMenuOpen]);
+
   return (
     <div
-      className={`min-h-screen overflow-x-hidden transition-colors duration-500 ${
-        isDark ? "text-white" : "text-slate-900"
-      }`}
+      className={`min-h-screen overflow-x-hidden transition-colors duration-500 ${isDark ? "text-white" : "text-slate-900"
+        }`}
       style={{
         background: isDark
           ? `radial-gradient(circle at 20% 0%, ${PALETTE.green1}44 0%, transparent 33%), radial-gradient(circle at 80% 0%, ${PALETTE.gold1}33 0%, transparent 32%), linear-gradient(180deg, ${PALETTE.forest} 0%, #0a1d14 45%, #08130e 100%)`
@@ -243,21 +252,20 @@ export default function TradeCapitalLanding() {
       }}
     >
       <header
-        className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${
-          scrolled
-            ? isDark
-              ? "backdrop-blur-xl border-b border-white/10 bg-[#0b1f18]/95 shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
-              : "backdrop-blur-xl border-b border-[#9ecbb2]/70 bg-white/90 shadow-[0_12px_34px_rgba(17,58,39,0.12)]"
-            : isDark
-              ? "bg-[#0b1f18]/60 backdrop-blur-md"
-              : "bg-white/55 backdrop-blur-md"
-        }`}
+        className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${scrolled
+          ? isDark
+            ? "backdrop-blur-xl border-b border-white/10 bg-[#0b1f18]/95 shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+            : "backdrop-blur-xl border-b border-[#9ecbb2]/70 bg-white/90 shadow-[0_12px_34px_rgba(17,58,39,0.12)]"
+          : isDark
+            ? "bg-[#0b1f18]/60 backdrop-blur-md"
+            : "bg-white/55 backdrop-blur-md"
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-[72px] flex items-center justify-between">
           <a
             href="#home"
             className="flex items-center gap-3 rounded-xl px-2.5 py-1.5  transition-all"
-            
+
           >
             <img
               src={logo}
@@ -270,11 +278,10 @@ export default function TradeCapitalLanding() {
               }}
             />
           </a>
-  
+
           <nav
-            className={`hidden md:flex items-center gap-6 text-sm ${
-              isDark ? "text-slate-200" : "text-slate-700"
-            }`}
+            className={`hidden md:flex items-center gap-6 text-sm ${isDark ? "text-slate-200" : "text-slate-700"
+              }`}
           >
             {navItems.map((item) => (
               <motion.a
@@ -287,20 +294,29 @@ export default function TradeCapitalLanding() {
               </motion.a>
             ))}
           </nav>
-  
+
+          <button
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className={`inline-flex h-10 w-10 items-center justify-center rounded-full border md:hidden ${isDark ? "border-white/20 bg-white/5 text-white" : "border-slate-300 bg-white text-slate-700"
+              }`}
+            aria-label="Toggle navigation"
+            aria-expanded={mobileMenuOpen}
+          >
+            <span className="text-xl font-semibold">{mobileMenuOpen ? "✕" : "☰"}</span>
+          </button>
+
           <div className="flex items-center gap-3">
             <button
               onClick={() => setTheme(isDark ? "light" : "dark")}
-              className={`inline-flex h-10 w-10 items-center justify-center rounded-full border ${
-                isDark ? "border-white/20 bg-white/5" : "border-slate-300 bg-white"
-              }`}
+              className={`inline-flex h-10 w-10 items-center justify-center rounded-full border ${isDark ? "border-white/20 bg-white/5" : "border-slate-300 bg-white"
+                }`}
               aria-label="Toggle theme"
             >
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-  
+
             <a
-              href="#"
+              href="https://tcmdashboard.tradecapitalmarket.com/sign-in"
               className="hidden sm:inline-flex rounded-full px-5 py-2.5 text-sm font-medium border"
               style={{
                 borderColor: isDark ? `${PALETTE.mint}66` : `${PALETTE.green1}77`,
@@ -308,9 +324,9 @@ export default function TradeCapitalLanding() {
             >
               Login
             </a>
-  
+
             <a
-              href="#"
+              href="https://tcmdashboard.tradecapitalmarket.com/create-account"
               className="inline-flex rounded-full px-5 py-2.5 text-sm font-semibold text-[#1e1606]"
               style={{
                 background: `linear-gradient(90deg, ${PALETTE.gold1} 0%, ${PALETTE.gold3} 48%, ${PALETTE.gold2} 100%)`,
@@ -321,8 +337,48 @@ export default function TradeCapitalLanding() {
             </a>
           </div>
         </div>
+        {mobileMenuOpen ? (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`md:hidden border-t px-4 pb-4 pt-3 transition-colors ${isDark
+              ? "border-white/10 bg-[#081911]/95"
+              : "border-slate-200 bg-white/95"
+              }`}
+            style={{ backdropFilter: "blur(18px)" }}
+          >
+            <div className="flex flex-col gap-3">
+              {navItems.map((item) => (
+                <a
+                  key={item}
+                  href={`#${item}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`capitalize text-base font-medium transition-colors ${isDark ? "text-slate-100 hover:text-[#f2b83f]" : "text-slate-900 hover:text-[#b28712]"
+                    }`}
+                >
+                  {item}
+                </a>
+              ))}
+              <a
+                href="#"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`rounded-full px-4 py-3 text-center text-sm font-medium border ${isDark ? "border-white/20 bg-white/5 text-white" : "border-slate-300 bg-slate-50 text-slate-900"
+                  }`}
+              >
+                Login
+              </a>
+              <a
+                href="#"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-full bg-gradient-to-r from-[#f2b83f] via-[#f8d233] to-[#d39028] px-4 py-3 text-center text-sm font-semibold text-[#1e1606]"
+              >
+                Open Account
+              </a>
+            </div>
+          </motion.div>
+        ) : null}
       </header>
-  
+
       <main className="relative pt-20 md:pt-[92px]">
         <motion.section
           id="home"
@@ -380,9 +436,8 @@ export default function TradeCapitalLanding() {
                 </motion.p>
 
                 <motion.h1 variants={heroItem}
-                  className={`mt-3 text-4xl md:text-5xl xl:text-6xl font-semibold leading-[0.94] tracking-[-0.03em] ${
-                    isDark ? "text-white" : "text-slate-900"
-                  }`}
+                  className={`mt-3 text-4xl md:text-5xl xl:text-6xl font-semibold leading-[0.94] tracking-[-0.03em] ${isDark ? "text-white" : "text-slate-900"
+                    }`}
                 >
                   Trade Capital
                   <span
@@ -394,9 +449,8 @@ export default function TradeCapitalLanding() {
                 </motion.h1>
 
                 <motion.p variants={heroItem}
-                  className={`mt-3 max-w-2xl text-sm md:text-[15px] leading-7 ${
-                    isDark ? "text-slate-300" : "text-slate-600"
-                  }`}
+                  className={`mt-3 max-w-2xl text-sm md:text-[15px] leading-7 ${isDark ? "text-slate-300" : "text-slate-600"
+                    }`}
                 >
                   Professional trading conditions across forex, commodities,
                   indices, and stocks. Built for serious traders who demand speed,
@@ -416,9 +470,8 @@ export default function TradeCapitalLanding() {
                   </motion.button>
 
                   <motion.button
-                    className={`rounded-xl border px-5 py-3 text-sm font-medium ${
-                      isDark ? "text-white" : "text-slate-800"
-                    }`}
+                    className={`rounded-xl border px-5 py-3 text-sm font-medium ${isDark ? "text-white" : "text-slate-800"
+                      }`}
                     style={{
                       borderColor: isDark ? `${PALETTE.mint}58` : `${PALETTE.green1}44`,
                       background: isDark
@@ -457,9 +510,8 @@ export default function TradeCapitalLanding() {
                       whileHover={{ y: -2 }}
                     >
                       <div
-                        className={`text-base md:text-lg font-semibold ${
-                          isDark ? "text-white" : "text-slate-900"
-                        }`}
+                        className={`text-base md:text-lg font-semibold ${isDark ? "text-white" : "text-slate-900"
+                          }`}
                       >
                         {label === "Tradeable Assets" ? (
                           <CountUp to={100} suffix="+" />
@@ -472,9 +524,8 @@ export default function TradeCapitalLanding() {
                         )}
                       </div>
                       <div
-                        className={`mt-1 text-[11px] uppercase tracking-[0.16em] ${
-                          isDark ? "text-slate-400" : "text-slate-500"
-                        }`}
+                        className={`mt-1 text-[11px] uppercase tracking-[0.16em] ${isDark ? "text-slate-400" : "text-slate-500"
+                          }`}
                       >
                         {label}
                       </div>
@@ -545,16 +596,14 @@ export default function TradeCapitalLanding() {
                     }}
                   >
                     <div
-                      className={`text-[10px] uppercase tracking-[0.14em] ${
-                        isDark ? "text-slate-400" : "text-slate-500"
-                      }`}
+                      className={`text-[10px] uppercase tracking-[0.14em] ${isDark ? "text-slate-400" : "text-slate-500"
+                        }`}
                     >
                       {key}
                     </div>
                     <div
-                      className={`mt-1 font-semibold ${
-                        isDark ? "text-white" : "text-slate-900"
-                      }`}
+                      className={`mt-1 font-semibold ${isDark ? "text-white" : "text-slate-900"
+                        }`}
                     >
                       {value}
                     </div>
@@ -590,11 +639,10 @@ export default function TradeCapitalLanding() {
         </motion.section>
 
         <section
-          className={`border-y overflow-hidden ${
-            isDark
-              ? "border-white/10 bg-white/[0.03] backdrop-blur-sm"
-              : "border-slate-200 bg-white/70"
-          }`}
+          className={`border-y overflow-hidden ${isDark
+            ? "border-white/10 bg-white/[0.03] backdrop-blur-sm"
+            : "border-slate-200 bg-white/70"
+            }`}
         >
           <div className="max-w-7xl mx-auto py-4">
             <motion.div
@@ -605,23 +653,20 @@ export default function TradeCapitalLanding() {
               {[...ticker, ...ticker].map((item, idx) => (
                 <div
                   key={`${item.symbol}-${idx}`}
-                  className={`flex items-center gap-3 rounded-full px-4 py-2.5 mx-1.5 ${
-                    isDark
-                      ? "border border-white/10 bg-slate-950/50"
-                      : "border border-slate-200 bg-white shadow-sm"
-                  }`}
+                  className={`flex items-center gap-3 rounded-full px-4 py-2.5 mx-1.5 ${isDark
+                    ? "border border-white/10 bg-slate-950/50"
+                    : "border border-slate-200 bg-white shadow-sm"
+                    }`}
                 >
                   <span
-                    className={`text-sm font-medium ${
-                      isDark ? "text-slate-200" : "text-slate-700"
-                    }`}
+                    className={`text-sm font-medium ${isDark ? "text-slate-200" : "text-slate-700"
+                      }`}
                   >
                     {item.symbol}
                   </span>
                   <span
-                    className={`font-semibold ${
-                      isDark ? "text-white" : "text-slate-900"
-                    }`}
+                    className={`font-semibold ${isDark ? "text-white" : "text-slate-900"
+                      }`}
                   >
                     {item.price}
                   </span>
@@ -632,8 +677,8 @@ export default function TradeCapitalLanding() {
           </div>
         </section>
 
-       
-  
+
+
         <section
           id="about"
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12"
@@ -667,7 +712,7 @@ export default function TradeCapitalLanding() {
               description="Trade Capital Markets is presented with a clean institutional tone, clear product hierarchy, and better readability from homepage to account opening."
             />
           </div>
-  
+
           <div className="mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-5">
             {features.map((feature, i) => (
               <motion.div
@@ -690,16 +735,14 @@ export default function TradeCapitalLanding() {
                   {feature.icon}
                 </div>
                 <h3
-                  className={`mt-4 text-xl font-semibold ${
-                    isDark ? "text-white" : "text-slate-900"
-                  }`}
+                  className={`mt-4 text-xl font-semibold ${isDark ? "text-white" : "text-slate-900"
+                    }`}
                 >
                   {feature.title}
                 </h3>
                 <p
-                  className={`mt-2 leading-7 text-sm ${
-                    isDark ? "text-slate-300" : "text-slate-600"
-                  }`}
+                  className={`mt-2 leading-7 text-sm ${isDark ? "text-slate-300" : "text-slate-600"
+                    }`}
                 >
                   {feature.desc}
                 </p>
@@ -707,7 +750,7 @@ export default function TradeCapitalLanding() {
             ))}
           </div>
         </section>
-  
+
         <section
           id="markets"
           className="py-10 md:py-12 border-y"
@@ -759,7 +802,7 @@ export default function TradeCapitalLanding() {
                   ))}
                 </div>
               </div>
-  
+
               <div className="grid sm:grid-cols-2 gap-4">
                 {marketRows.map((item, i) => (
                   <motion.div
@@ -776,8 +819,8 @@ export default function TradeCapitalLanding() {
                           ? "#0f291f"
                           : "#132e24"
                         : i % 2 === 0
-                        ? "#fffef6"
-                        : "#f6fbf8",
+                          ? "#fffef6"
+                          : "#f6fbf8",
                     }}
                   >
                     <p
@@ -786,23 +829,21 @@ export default function TradeCapitalLanding() {
                     >
                       0{i + 1}
                     </p>
-  
+
                     <h3
-                      className={`mt-3 text-2xl font-semibold ${
-                        isDark ? "text-white" : "text-slate-900"
-                      }`}
+                      className={`mt-3 text-2xl font-semibold ${isDark ? "text-white" : "text-slate-900"
+                        }`}
                     >
                       {item.title}
                     </h3>
-  
+
                     <p
-                      className={`mt-3 leading-7 ${
-                        isDark ? "text-slate-300" : "text-slate-600"
-                      }`}
+                      className={`mt-3 leading-7 ${isDark ? "text-slate-300" : "text-slate-600"
+                        }`}
                     >
                       {item.long}
                     </p>
-  
+
                     <div className="mt-4 flex flex-wrap gap-2">
                       {item.bullets.map((bullet) => (
                         <span
@@ -817,7 +858,7 @@ export default function TradeCapitalLanding() {
                         </span>
                       ))}
                     </div>
-  
+
                     <button
                       className="mt-5 inline-flex items-center gap-2 text-sm font-semibold"
                       style={{ color: PALETTE.gold1 }}
@@ -830,7 +871,7 @@ export default function TradeCapitalLanding() {
             </div>
           </div>
         </section>
-  
+
         <section
           id="accounts"
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12"
@@ -846,24 +887,22 @@ export default function TradeCapitalLanding() {
             >
               Account Types
             </p>
-  
+
             <h2
-              className={`mt-3 text-4xl md:text-5xl font-semibold ${
-                isDark ? "text-white" : "text-slate-900"
-              }`}
+              className={`mt-3 text-4xl md:text-5xl font-semibold ${isDark ? "text-white" : "text-slate-900"
+                }`}
             >
               Select Your Tier
             </h2>
-  
+
             <p
-              className={`mt-4 leading-7 ${
-                isDark ? "text-slate-300" : "text-slate-600"
-              }`}
+              className={`mt-4 leading-7 ${isDark ? "text-slate-300" : "text-slate-600"
+                }`}
             >
               Tailored trading conditions for every stage of your market journey.
             </p>
           </div>
-  
+
           <div className="mt-10 grid lg:grid-cols-3 gap-6">
             {accounts.map((account, i) => (
               <motion.div
@@ -896,7 +935,7 @@ export default function TradeCapitalLanding() {
                     >
                       {account.label}
                     </p>
-  
+
                     {account.featured ? (
                       <span
                         className="text-[10px] uppercase tracking-[0.16em] px-2 py-1 rounded"
@@ -906,22 +945,20 @@ export default function TradeCapitalLanding() {
                       </span>
                     ) : null}
                   </div>
-  
+
                   <h3
-                    className={`mt-2 text-4xl font-semibold ${
-                      isDark ? "text-white" : "text-slate-900"
-                    }`}
+                    className={`mt-2 text-4xl font-semibold ${isDark ? "text-white" : "text-slate-900"
+                      }`}
                   >
                     {account.name}
                   </h3>
-  
+
                   <ul className="mt-7 space-y-4">
                     {account.points.map((point) => (
                       <li
                         key={point}
-                        className={`flex items-center gap-3 ${
-                          isDark ? "text-slate-200" : "text-slate-700"
-                        }`}
+                        className={`flex items-center gap-3 ${isDark ? "text-slate-200" : "text-slate-700"
+                          }`}
                       >
                         <CircleCheck
                           className="h-4 w-4 shrink-0"
@@ -933,16 +970,15 @@ export default function TradeCapitalLanding() {
                       </li>
                     ))}
                   </ul>
-  
+
                   <motion.a
                     href="#"
-                    className={`mt-8 inline-flex w-full justify-center border px-5 py-3.5 font-semibold uppercase tracking-[0.14em] text-sm ${
-                      account.featured
-                        ? "text-[#2d2107]"
-                        : isDark
+                    className={`mt-8 inline-flex w-full justify-center border px-5 py-3.5 font-semibold uppercase tracking-[0.14em] text-sm ${account.featured
+                      ? "text-[#2d2107]"
+                      : isDark
                         ? "text-slate-200"
                         : "text-slate-800"
-                    }`}
+                      }`}
                     style={{
                       borderColor: account.featured
                         ? `${PALETTE.gold2}66`
@@ -961,7 +997,7 @@ export default function TradeCapitalLanding() {
             ))}
           </div>
         </section>
-  
+
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 md:pb-18">
           <div
             className="rounded-[28px] p-8 md:p-10 border"
@@ -982,25 +1018,23 @@ export default function TradeCapitalLanding() {
                 >
                   Conversion Zone
                 </p>
-  
+
                 <h2
-                  className={`mt-4 text-3xl md:text-5xl font-semibold leading-tight ${
-                    isDark ? "text-white" : "text-slate-900"
-                  }`}
+                  className={`mt-4 text-3xl md:text-5xl font-semibold leading-tight ${isDark ? "text-white" : "text-slate-900"
+                    }`}
                 >
                   Designed to convert with confidence
                 </h2>
-  
+
                 <p
-                  className={`mt-4 leading-8 ${
-                    isDark ? "text-slate-300" : "text-slate-600"
-                  }`}
+                  className={`mt-4 leading-8 ${isDark ? "text-slate-300" : "text-slate-600"
+                    }`}
                 >
                   A final trust-focused section with clear metrics and direct action
                   routes that complete the premium experience.
                 </p>
               </div>
-  
+
               <div className="grid sm:grid-cols-2 gap-4">
                 {[
                   ["Execution Speed", "<30ms"],
@@ -1028,15 +1062,14 @@ export default function TradeCapitalLanding() {
                       {k}
                     </p>
                     <p
-                      className={`mt-1 text-2xl font-semibold ${
-                        isDark ? "text-white" : "text-slate-900"
-                      }`}
+                      className={`mt-1 text-2xl font-semibold ${isDark ? "text-white" : "text-slate-900"
+                        }`}
                     >
                       {v}
                     </p>
                   </motion.div>
                 ))}
-  
+
                 <motion.a
                   href="#"
                   className="sm:col-span-2 inline-flex justify-center items-center gap-2 rounded-2xl px-6 py-4 font-semibold text-[#241704]"
@@ -1053,7 +1086,7 @@ export default function TradeCapitalLanding() {
           </div>
         </section>
       </main>
-  
+
       <footer
         id="contact"
         className="border-t"
@@ -1072,16 +1105,15 @@ export default function TradeCapitalLanding() {
                     : "drop-shadow(0 0 20px rgba(248,210,52,0.45))",
                 }}
               />
-  
+
               <p
-                className={`mt-4 max-w-2xl leading-7 ${
-                  isDark ? "text-slate-300" : "text-slate-600"
-                }`}
+                className={`mt-4 max-w-2xl leading-7 ${isDark ? "text-slate-300" : "text-slate-600"
+                  }`}
               >
                 Trade Capital Markets with a clean, premium interface designed for
                 trust, clarity, and stronger conversion.
               </p>
-  
+
               <div className="mt-6 grid sm:grid-cols-2 gap-4">
                 {[
                   [<Mail className="h-4 w-4" />, "support@tradecapitalmarkets.com"],
@@ -1107,7 +1139,7 @@ export default function TradeCapitalLanding() {
                 ))}
               </div>
             </div>
-  
+
             <div
               className="rounded-[22px] p-6 border"
               style={{
@@ -1121,7 +1153,7 @@ export default function TradeCapitalLanding() {
               >
                 Quick Access
               </p>
-  
+
               <ul className={`mt-5 space-y-3 ${isDark ? "text-slate-300" : "text-slate-700"}`}>
                 {["Home", "About", "Markets", "Accounts", "Contact", "Open Account", "Client Login"].map(
                   (item) => (
@@ -1134,11 +1166,10 @@ export default function TradeCapitalLanding() {
               </ul>
             </div>
           </div>
-  
+
           <p
-            className={`mt-8 pt-5 border-t text-sm ${
-              isDark ? "text-slate-400" : "text-slate-500"
-            }`}
+            className={`mt-8 pt-5 border-t text-sm ${isDark ? "text-slate-400" : "text-slate-500"
+              }`}
             style={{ borderColor: isDark ? `${PALETTE.mint}22` : `${PALETTE.green1}22` }}
           >
             © 2026 Trade Capital Markets. All rights reserved.
