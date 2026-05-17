@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "description": "A premium broker-style React landing page inspired by the provided reference websites.",
-  "homepage": "https://github.com/sdeayushigupta55-netizen/TradeCapitalMarket#readme",
+  "homepage": "https://github.com/Ranjan-dev26/TradeCapitalMarket#readme",
   "bugs": {
-    "url": "https://github.com/sdeayushigupta55-netizen/TradeCapitalMarket/issues"
+    "url": "https://github.com/Ranjan-dev26/TradeCapitalMarket/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sdeayushigupta55-netizen/TradeCapitalMarket.git"
+    "url": "git+https://github.com/Ranjan-dev26/TradeCapitalMarket.git"
   },
   "license": "ISC",
   "author": "",
