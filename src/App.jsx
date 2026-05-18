@@ -57,35 +57,42 @@ const features = [
 
 const accounts = [
   {
-    name: "Core",
+    name: "Standard",
     label: "Retail Standard",
     points: [
-      "Spreads from 1.0 pips",
+      "Minimum deposit $100",
       "Zero commission",
-      "Standard execution",
+      "Max Leverage 1:500",
+      "Spreads from 2.0 pips",
+      "Min Lot size 0.01",
     ],
     cta: "Get Started",
   },
   {
-    name: "Prime",
+    name: "Pro",
     label: "Most Professional",
     featured: true,
     points: [
-      "Spreads from 0.2 pips",
-      "$3.50 per side commission",
+      "Minimum deposit $1000",
+      "Zero commission",
+      "Max Leverage 1:500",
+      "Spreads from 1.2 pips",
       "Priority LP routing",
       "Personal account manager",
+      "Min Lot size 0.01",
     ],
     cta: "Open Prime",
   },
   {
-    name: "Elite",
+    name: "Premium",
     label: "Institutional",
     points: [
+      "Minimum deposit $10,000",
       "Raw spreads (0.0 pips)",
       "Custom commission structure",
       "FIX API access",
       "Co-located servers (NY4)",
+      "Min Lot size 0.01"
     ],
     cta: "Request Elite",
   },
@@ -1155,7 +1162,7 @@ export default function TradeCapitalLanding() {
               </p>
 
               <ul className={`mt-5 space-y-3 ${isDark ? "text-slate-300" : "text-slate-700"}`}>
-                {["Home", "About", "Markets", "Accounts", "Contact", "Open Account", "Client Login"].map(
+                {["Home", "About", "Markets", "Accounts", "Contact", "Open Account"].map(
                   (item) => (
                     <li key={item} className="flex items-center justify-between">
                       <span>{item}</span>
