@@ -322,16 +322,6 @@ export default function TradeCapitalLanding() {
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
 
-            {/* <a
-              href="https://crm.tradecapitalmarket.com/login"
-              className="hidden sm:inline-flex rounded-full px-5 py-2.5 text-sm font-medium border"
-              style={{
-                borderColor: isDark ? `${PALETTE.mint}66` : `${PALETTE.green1}77`,
-              }}
-            >
-              Login
-            </a> */}
-
             <a
               href="https://crm.tradecapitalmarket.com/login"
               className="inline-flex rounded-full px-5 py-2.5 text-sm font-semibold text-[#1e1606]"
@@ -340,8 +330,19 @@ export default function TradeCapitalLanding() {
                 boxShadow: `0 10px 30px ${PALETTE.gold2}55`,
               }}
             >
-              Open Account
+              Login
             </a>
+
+            { <a
+              href="https://crm.tradecapitalmarket.com/register"
+              className="hidden sm:inline-flex rounded-full px-5 py-2.5 text-sm font-medium border"
+              style={{
+                borderColor: isDark ? `${PALETTE.mint}66` : `${PALETTE.green1}77`,
+              }}
+            >
+              Create Account
+            </a> }
+
           </div>
         </div>
         {mobileMenuOpen ? (
@@ -366,20 +367,20 @@ export default function TradeCapitalLanding() {
                   {item}
                 </a>
               ))}
-              {/* <a
+              {<a
                 href="https://crm.tradecapitalmarket.com/login"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`rounded-full px-4 py-3 text-center text-sm font-medium border ${isDark ? "border-white/20 bg-white/5 text-white" : "border-slate-300 bg-slate-50 text-slate-900"
                   }`}
               >
                 Login
-              </a> */}
+              </a> }
               <a
-                href="https://crm.tradecapitalmarket.com/login"
+                href="https://crm.tradecapitalmarket.com/register"
                 onClick={() => setMobileMenuOpen(false)}
                 className="rounded-full bg-gradient-to-r from-[#f2b83f] via-[#f8d233] to-[#d39028] px-4 py-3 text-center text-sm font-semibold text-[#1e1606]"
               >
-                Open Account
+                Create Account
               </a>
             </div>
           </motion.div>
