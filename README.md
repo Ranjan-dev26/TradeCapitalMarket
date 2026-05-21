@@ -20,8 +20,8 @@ npm run build
 Update the login and signup URLs in `src/App.jsx`:
 
 ```js
-const loginUrl = '#'
-const signupUrl = '#'
+const loginUrl = 'https://www.tradecapitalmarket.com'
+const signupUrl = 'https://crm.tradecapitalmarket.com/register'
 ```
 
 Replace the text content as needed for the final client version.
